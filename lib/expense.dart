@@ -1,3 +1,4 @@
+import 'package:expense_tracker/new_expense.dart';
 import 'package:expense_tracker/widgets/expense_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'model/expense_item.dart';
@@ -10,6 +11,14 @@ class Expense extends StatefulWidget {
 }
 
 class _ExpenseState extends State<Expense> {
+  void _showExpense() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      context: context,
+      builder: (ctx) => NewExpense(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<ExpenseItem> expenseItems = [
@@ -38,37 +47,37 @@ class _ExpenseState extends State<Expense> {
         date: DateTime.now(),
       ),
     ];
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Expense Tracker',
-            style: TextStyle(color: Colors.white),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Expense Tracker',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _showExpense();
+            },
+            icon: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
+        ],
+        backgroundColor: Colors.amber,
+      ),
+      body: Column(
+        children: [
+          const Text("Chart"),
+          Expanded(
+            child: ListView.builder(
+              itemCount: expenseItems.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ExpenseItemWidget(expenseItems[index]);
+              },
             ),
-          ],
-          backgroundColor: Colors.amber,
-        ),
-        body: Column(
-          children: [
-            const Text("Chart"),
-            Expanded(
-              child: ListView.builder(
-                itemCount: expenseItems.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ExpenseItemWidget(expenseItems[index]);
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
