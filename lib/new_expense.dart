@@ -3,22 +3,38 @@ import 'package:intl/intl.dart';
 import 'package:expense_tracker/model/expense_item.dart';
 
 class NewExpense extends StatefulWidget {
+  final void Function(ExpenseItem item) onAddExpense;
+  const NewExpense({super.key, required this.onAddExpense});
+
   @override
   State<NewExpense> createState() => _NewExpenseState();
 }
 
 class _NewExpenseState extends State<NewExpense> {
   final _titleEditingController = TextEditingController();
-  String _pickedDate = 'Please select a date';
+  final _amountEditingController = TextEditingController();
+  DateTime? _pickedDate;
   ExpenseCategory _selectedCategory = ExpenseCategory.leisure;
 
   @override
   void dispose() {
     _titleEditingController.dispose();
+    _amountEditingController.dispose();
     super.dispose();
   }
 
-  void _submitExpenseData() {}
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountEditingController.text);
+    widget.onAddExpense(
+      ExpenseItem(
+        title: _titleEditingController.text,
+        amount: enteredAmount ?? 0,
+        category: _selectedCategory,
+        date: _pickedDate!,
+      ),
+    );
+    Navigator.pop(context);
+  }
 
   void _showDatePopup() async {
     final pickedDate = await showDatePicker(
@@ -29,15 +45,15 @@ class _NewExpenseState extends State<NewExpense> {
     );
 
     if (pickedDate != null) {
-      final formatter = DateFormat.yMd();
       setState(() {
-        _pickedDate = formatter.format(pickedDate);
+        _pickedDate = pickedDate;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final formatter = DateFormat.yMd();
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -49,7 +65,8 @@ class _NewExpenseState extends State<NewExpense> {
             keyboardType: TextInputType.text,
             maxLength: 50,
           ),
-          const TextField(
+          TextField(
+            controller: _amountEditingController,
             decoration: InputDecoration(labelText: 'Amount', prefixText: '\$'),
             keyboardType: TextInputType.number,
           ),
@@ -59,7 +76,9 @@ class _NewExpenseState extends State<NewExpense> {
               _showDatePopup();
             },
             label: Text(
-              _pickedDate,
+              _pickedDate == null
+                  ? "please select a date"
+                  : formatter.format(_pickedDate!),
               textAlign: TextAlign.left,
               style: const TextStyle(color: Colors.white),
             ),

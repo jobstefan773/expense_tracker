@@ -11,43 +11,50 @@ class Expense extends StatefulWidget {
 }
 
 class _ExpenseState extends State<Expense> {
+  List<ExpenseItem> expenseItems = [
+    ExpenseItem(
+      title: 'Lunch',
+      amount: 15.99,
+      category: ExpenseCategory.food,
+      date: DateTime.now(),
+    ),
+    ExpenseItem(
+      title: 'Train Ticket',
+      amount: 45.0,
+      category: ExpenseCategory.travel,
+      date: DateTime.now(),
+    ),
+    ExpenseItem(
+      title: 'Movie',
+      amount: 12.0,
+      category: ExpenseCategory.leisure,
+      date: DateTime.now(),
+    ),
+    ExpenseItem(
+      title: 'Office Supplies',
+      amount: 30.0,
+      category: ExpenseCategory.work,
+      date: DateTime.now(),
+    ),
+  ];
+
   void _showExpense() {
     showModalBottomSheet(
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (ctx) => NewExpense(),
+      builder: (ctx) => NewExpense(onAddExpense: _addExpenseItem),
     );
+  }
+
+  void _addExpenseItem(ExpenseItem expense) {
+    setState(() {
+      expenseItems.add(expense);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<ExpenseItem> expenseItems = [
-      ExpenseItem(
-        title: 'Lunch',
-        amount: 15.99,
-        category: ExpenseCategory.food,
-        date: DateTime.now(),
-      ),
-      ExpenseItem(
-        title: 'Train Ticket',
-        amount: 45.0,
-        category: ExpenseCategory.travel,
-        date: DateTime.now(),
-      ),
-      ExpenseItem(
-        title: 'Movie',
-        amount: 12.0,
-        category: ExpenseCategory.leisure,
-        date: DateTime.now(),
-      ),
-      ExpenseItem(
-        title: 'Office Supplies',
-        amount: 30.0,
-        category: ExpenseCategory.work,
-        date: DateTime.now(),
-      ),
-    ];
     return Scaffold(
       appBar: AppBar(
         title: const Text(
