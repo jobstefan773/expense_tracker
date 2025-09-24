@@ -53,6 +53,12 @@ class _ExpenseState extends State<Expense> {
     });
   }
 
+  void onRemoveExpense(ExpenseItem expense) {
+    setState(() {
+      expenseItems.remove(expense);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +87,13 @@ class _ExpenseState extends State<Expense> {
             child: ListView.builder(
               itemCount: expenseItems.length,
               itemBuilder: (BuildContext context, int index) {
-                return ExpenseItemWidget(expenseItems[index]);
+                return Dismissible(
+                  key: ValueKey(expenseItems[index]),
+                  child: ExpenseItemWidget(expenseItems[index]),
+                  onDismissed: (direction) {
+                    onRemoveExpense(expenseItems[index]);
+                  },
+                );
               },
             ),
           ),
