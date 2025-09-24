@@ -18,6 +18,8 @@ class _NewExpenseState extends State<NewExpense> {
     super.dispose();
   }
 
+  void _submitExpenseData() {}
+
   void _showDatePopup() async {
     final pickedDate = await showDatePicker(
       context: context,
@@ -91,10 +93,16 @@ class _NewExpenseState extends State<NewExpense> {
           ),
           const SizedBox(height: 20),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber,
+                  foregroundColor: Colors.white,
+                  textStyle: const TextStyle(color: Colors.white),
+                ),
                 onPressed: () {
-                  print(_titleEditingController.text);
+                  _submitExpenseData();
                 },
                 child: const Text('Add Expense'),
               ),
