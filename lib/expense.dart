@@ -14,6 +14,7 @@ class _ExpenseState extends State<Expense> {
   void _showExpense() {
     showModalBottomSheet(
       useSafeArea: true,
+      isScrollControlled: true,
       context: context,
       builder: (ctx) => NewExpense(),
     );

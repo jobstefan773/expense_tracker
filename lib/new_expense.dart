@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:expense_tracker/model/expense_item.dart';
 
 class NewExpense extends StatefulWidget {
   @override
@@ -9,6 +10,7 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   final _titleEditingController = TextEditingController();
   String _pickedDate = 'Please select a date';
+  ExpenseCategory _selectedCategory = ExpenseCategory.leisure;
 
   @override
   void dispose() {
@@ -67,6 +69,25 @@ class _NewExpenseState extends State<NewExpense> {
                 borderRadius: BorderRadius.circular(2.0),
               ),
             ),
+          ),
+          const SizedBox(height: 20),
+          DropdownButton<ExpenseCategory>(
+            value: _selectedCategory,
+            items: ExpenseCategory.values
+                .map(
+                  (category) => DropdownMenuItem(
+                    value: category,
+                    child: Text(category.name.toUpperCase()),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) {
+              if (value != null) {
+                setState(() {
+                  _selectedCategory = value;
+                });
+              }
+            },
           ),
           const SizedBox(height: 20),
           Row(
