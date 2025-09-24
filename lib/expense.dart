@@ -54,9 +54,26 @@ class _ExpenseState extends State<Expense> {
   }
 
   void onRemoveExpense(ExpenseItem expense) {
+    final index = expenseItems.indexOf(expense);
     setState(() {
       expenseItems.remove(expense);
     });
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(
+      SnackBar(
+        content: Text("expense deleted"),
+        duration: Duration(seconds: 5),
+        action: SnackBarAction(
+          label: "Undo",
+          onPressed: () {
+            setState(() {
+              expenseItems.insert(index, expense);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -81,22 +98,25 @@ class _ExpenseState extends State<Expense> {
         backgroundColor: Colors.amber,
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text("Chart"),
-          Expanded(
-            child: ListView.builder(
-              itemCount: expenseItems.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Dismissible(
-                  key: ValueKey(expenseItems[index]),
-                  child: ExpenseItemWidget(expenseItems[index]),
-                  onDismissed: (direction) {
-                    onRemoveExpense(expenseItems[index]);
-                  },
-                );
-              },
-            ),
-          ),
+          expenseItems.isEmpty
+              ? const Center(child: Text("No expenses yet, add some!"))
+              : Expanded(
+                  child: ListView.builder(
+                    itemCount: expenseItems.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Dismissible(
+                        key: ValueKey(expenseItems[index]),
+                        child: ExpenseItemWidget(expenseItems[index]),
+                        onDismissed: (direction) {
+                          onRemoveExpense(expenseItems[index]);
+                        },
+                      );
+                    },
+                  ),
+                ),
         ],
       ),
     );
