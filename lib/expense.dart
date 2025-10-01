@@ -2,6 +2,7 @@ import 'package:expense_tracker/new_expense.dart';
 import 'package:expense_tracker/widgets/expense_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'model/expense_item.dart';
+import 'package:expense_tracker/widgets/chart/chart.dart';
 
 class Expense extends StatefulWidget {
   const Expense({super.key});
@@ -100,7 +101,9 @@ class _ExpenseState extends State<Expense> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text("Chart"),
+          Chart(
+            expenses: expenseItems,
+          ),
           expenseItems.isEmpty
               ? const Center(child: Text("No expenses yet, add some!"))
               : Expanded(

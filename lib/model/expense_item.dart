@@ -37,7 +37,7 @@ class ExpenseItem {
 }
 
 class ExpenseBucket {
-  final Category category;
+  final ExpenseCategory category;
   final List<ExpenseItem> expenses;
 
   ExpenseBucket({required this.category, required this.expenses});
